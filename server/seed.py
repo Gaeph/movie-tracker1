@@ -1,22 +1,15 @@
-from config import db
+from config import db, app
 from models import Movie
-from faker import Faker
 
-fake = Faker()
+with app.app_context():
+    Movie.query.delete()  
 
-def seed():
-    db.drop_all()
-    db.create_all()
-    sample = [
-        {"title":"The Matrix","director":"Lana Wachowski","release_year":1999,"genre":"Sci-Fi","rating":8.7},
-        {"title":"Inception","director":"Christopher Nolan","release_year":2010,"genre":"Sci-Fi","rating":8.8},
-        {"title":"Parasite","director":"Bong Joon-ho","release_year":2019,"genre":"Thriller","rating":8.6},
+    movies = [
+        Movie(title="Inception", director="Christopher Nolan", release_year=2010, genre="Sci-Fi", rating=8.8),
+        Movie(title="Titanic", director="James Cameron", release_year=1997, genre="Romance", rating=7.8),
+        Movie(title="The Matrix", director="Wachowski Sisters", release_year=1999, genre="Action", rating=8.7),
     ]
-    for s in sample:
-        m = Movie(**s)
-        db.session.add(m)
-    db.session.commit()
-    print("Seeded sample movies.")
 
-if __name__ == '__main__':
-    seed()
+    db.session.add_all(movies)
+    db.session.commit()
+    print("Seed terminé !")

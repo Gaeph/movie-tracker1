@@ -2,9 +2,6 @@ from flask import request
 from flask_restful import Resource
 from config import app, db, api
 from models import Movie
-from flask_cors import CORS
-
-CORS(app)
 
 class MoviesResource(Resource):
     def get(self):
@@ -24,6 +21,7 @@ class MoviesResource(Resource):
         db.session.commit()
         return movie.to_dict(), 201
 
+
 class MovieResource(Resource):
     def get(self, movie_id):
         movie = Movie.query.get_or_404(movie_id)
@@ -32,7 +30,7 @@ class MovieResource(Resource):
     def patch(self, movie_id):
         movie = Movie.query.get_or_404(movie_id)
         data = request.get_json() or {}
-        for k in ("title","director","release_year","genre","rating"):
+        for k in ("title", "director", "release_year", "genre", "rating"):
             if k in data:
                 setattr(movie, k, data[k])
         db.session.commit()
@@ -43,6 +41,7 @@ class MovieResource(Resource):
         db.session.delete(movie)
         db.session.commit()
         return {}, 204
+
 
 api.add_resource(MoviesResource, '/movies')
 api.add_resource(MovieResource, '/movies/<int:movie_id>')

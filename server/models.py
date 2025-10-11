@@ -2,7 +2,8 @@ from config import db
 from sqlalchemy_serializer import SerializerMixin
 
 class Movie(db.Model, SerializerMixin):
-    __tablename__ = 'movies'
+    __tablename__ = "movies"
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     director = db.Column(db.String)
@@ -10,5 +11,8 @@ class Movie(db.Model, SerializerMixin):
     genre = db.Column(db.String)
     rating = db.Column(db.Float)
 
+    # Si w vle, ou ka presize ki kolòn pou serialize
+    serialize_rules = ("-some_relationship",)  # opsyonèl
+
     def __repr__(self):
-        return f"<Movie {self.title}>"
+        return f"<Movie {self.id}: {self.title}>"
